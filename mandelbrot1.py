@@ -1,7 +1,10 @@
+
+
 # verified (tried out, to be exact) by me: miro holec, 01.06.2023
 # source: https://medium.com/swlh/visualizing-the-mandelbrot-set-using-python-50-lines-f6aa5a05cf0f
 # author: Blake Sanie
 # Date: Nov 24, 2020
+# modified by: miro holec, Jun 01, 2023
 
 # Zn+1 = Zn**2 + C
 # C = a + b*i
@@ -12,18 +15,19 @@
 # therefore (a * b*i)**2 = a**2 +2abi - b**2 = (a**2 - b**2) +2abi = a new complex number
 # and watching out, when it shall diverge, after how many iterations (coloring issue)
 
-from PIL import Image # pillow image processing library
+from PIL import Image # pillow image processing library 
 import colorsys
 import math
 import os
+import platform
 
-width = 1000 #pixels
+width = 600 #pixels
 x = -0.65
 y = 0
 xRange = 3.4
 aspectRatio = 4/3
 
-precision = 500 # number of iterations
+precision = 100 # number of iterations
 
 height = round(width / aspectRatio)
 yRange = xRange / aspectRatio
@@ -43,9 +47,8 @@ maxY = y + yRange / 2
 #             |
 #             | y - yRange / 2
 
-img = Image.new('RGB', (width, height), color = 'black')
-pixels = img.load()
-# print(type(pixels)) # <class 'PixelAccess'>
+img = Image.new('RGB', (width, height), color = 'black') 
+pixels = img.load() 
 
 def logColor(distance, base, const, scale):
     color = -1*math.log(distance,base)
@@ -82,10 +85,17 @@ for row in range(height):
                 rgb = powerColor(distance, 0.2, 0.27, 1.0)
                 pixels[col,row] = rgb
             index = row * width + col + 1
-            print("{} / {}, {}%".format(index, width * height, round(index / width / height * 100 * 10)/10))
+            #print("{} / {}, {}%".format(index, width * height, round(index / width / height * 100 * 10)/10))
+
+
+
 
 img.save('output.png')
-os.system('open output.png')
+if platform.system() == 'Windows':
+    os.system('start output.png')
+else:
+    os.system('open output.png')
+
 
 
 
